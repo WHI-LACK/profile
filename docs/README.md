@@ -4,6 +4,8 @@
   右下角可关闭的通知卡。
 - **`screenshot-live-site.png`**：部署到 GitHub Pages 之后、直接访问
   https://whi-lack.github.io/profile/ 截的图（2026-10-12），用来确认线上跑的是同一套代码。
+- **`screenshot-print-sheet.png`**：A4 打印模板（`print.html`）的一页示例，窗口缩放到 71.5%
+  以便整页入镜；实际打印时是 100% 的 210 × 296 mm。
 - **`screenshot-book-open.png`**：打开一本书之后。整页两种颜色被换成这本书自己的一对
   （这里是 `#C1B676` / `#18185E`），书本立起来并可拖拽旋转，返回箭头、标题、作者、购买按钮、
   作者书牌依次排开。
