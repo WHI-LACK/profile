@@ -812,7 +812,7 @@ window.PRESS = window.PRESS || {};
     cta.textContent = SITE.newCard.cta;
     cta.addEventListener('click', function (e) {
       e.preventDefault();
-      var idx = PRODUCTS.findIndex(function (p) { return p.slug === 'field-notes-on-speed'; });
+      var idx = PRODUCTS.findIndex(function (p) { return p.slug === (SITE.newCard.slug || null); });
       if (idx > -1) openProduct(idx);
       dismissCard();
     });

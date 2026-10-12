@@ -108,20 +108,21 @@ facts: [['Format', 'Hardcover, 152 × 229 mm'], ['Pages', '268'], ['First publis
 ```js
 {
   kind: 'book',                       // book | film | podcast
-  slug: 'the-long-middle',            // 深链接用，会变成 /the-long-middle
-  title: 'The Long Middle',
-  author: 'Mara Ellison',
-  theme: { bg: '#292432', fg: '#DBC895', cover: '#292432' },   // 这一件的两种颜色
-  cover: { rule: 'marble', ink: '#10262c', paper: '#e9dfc6', accent: '#e2803f', motif: '#7fc9bd' },
+  slug: 'groove',                     // 深链接用，会变成 #/groove
+  title: 'groove',
+  author: 'Ari Nakamura',
+  theme: { bg: '#141310', fg: '#EDE3CB', cover: '#EDE3CB' },   // 这一件的两种颜色
+  cover: { rule: 'groove', ink: '#1A1917', paper: '#EDE3CB', accent: '#FF5A2B', motif: '#8C8577' },
   about: '……',
-  buy: { label: 'Buy the book', links: [{ label: 'Publisher', href: '#' }] },
+  buy: { label: 'Get the book', links: [{ label: 'Publisher', href: '#' }] },
   authorBio: '……',
   praise: [{ body: '……', name: '……', role: '……' }]
 }
 ```
 
 `cover.rule` 可选：`marble` `halftone` `topo` `contour` `stripes` `circles` `blueprint`
-`botanical` `ripple` `arcs` `concentric` `waveform` `starfield` `venn`。
+`botanical` `ripple` `arcs` `concentric` `waveform` `starfield` `venn`，
+以及为音乐／科技主题新加的 `globe` `groove` `growth` `circuit` `pixel`。
 增删条目后，目录行、刻度尺、详情面板会自动重建，不用动其它文件。
 
 **换成真实封面图**：把 `js/covers.js` 里的 `front(product)` 改成加载图片再画进一个 canvas，

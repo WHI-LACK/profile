@@ -46,9 +46,11 @@ window.PRESS = window.PRESS || {};
     },
     newCard: {
       title: 'New this season',
-      sub: 'Field Notes on Speed — out now',
+      sub: 'groove — out now',
       cta: 'Read the excerpt',
       ctaSuffix: '→',
+      /* which product the card links to (slug from the list above) */
+      slug: 'groove',
       dismiss: 'Dismiss'
     },
     /* Optional: POST the newsletter form here (Formspree, Buttondown, your own
@@ -62,62 +64,65 @@ window.PRESS = window.PRESS || {};
      -------------------------------------------------------------------------- */
   var BOOKS = [
     {
-      kind: 'book', slug: 'the-long-middle', title: 'The Long Middle', author: 'Mara Ellison',
-      theme: { bg: '#292432', fg: '#DBC895', cover: '#292432' },
-      cover: { rule: 'marble', ink: '#10262c', paper: '#e9dfc6', accent: '#e2803f', motif: '#7fc9bd' },
-      /* Optional: any [label, value] pairs you want printed on the A4 sheet.
-         Delete the line and the block simply disappears. */
-      facts: [['Format', 'Hardcover, 152 × 229 mm'], ['Pages', '268'], ['First published', 'March 2026']],
-      about: 'Every durable thing — a bridge, a standards body, a language — spends most of its life in the middle: past the founding story, well before the ending. This book is about that long, unglamorous centre.',
-      buy: { label: 'Buy the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
-      authorBio: 'Mara Ellison writes about institutions and the people who keep them standing. She lives in Utrecht.',
+      kind: 'book', slug: 'global', title: 'global', author: 'Nadia Brandt',
+      theme: { bg: '#101C33', fg: '#E4C67C', cover: '#12294D' },
+      cover: { rule: 'globe', ink: '#0B1B38', paper: '#12294D', accent: '#D9A441', motif: '#3C5A8A' },
+      facts: [['Format', 'Hardcover, 152 × 229 mm'], ['Pages', '304'], ['Published', '2026']],
+      about: 'A container leaves Shenzhen on a Tuesday and is unloaded in Rotterdam on a Thursday, and nobody who touches it reads the same paperwork. This is a book about the quiet machinery — standards, cables, tariffs, insurance — that lets one product be made in nine countries and still be called a single thing.',
+      buy: { label: 'Get the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
+      authorBio: 'Nadia Brandt reports on trade and logistics from Rotterdam.',
       praise: [
-        { body: 'A quiet, stubborn book about the work nobody photographs.', name: 'Ivan Petrov', role: 'Historian of engineering' },
-        { body: 'Ellison makes maintenance read like a thriller.', name: 'Dana Whitfield', role: 'Author of Rebar' }
+        { body: 'Makes customs paperwork read like a thriller.', name: 'T. Okafor', role: 'Freight forwarder' },
+        { body: 'The best book about globalisation that never once says globalisation.', name: 'L. Marsh', role: 'Economist' }
       ]
     },
     {
-      kind: 'book', slug: 'field-notes-on-speed', title: 'Field Notes on Speed', author: 'Idris Kwan',
-      theme: { bg: '#C1B676', fg: '#18185E', cover: '#1D1D62' },
-      cover: { rule: 'halftone', ink: '#1d1d62', paper: '#d8cba0', accent: '#f0e6c8', motif: '#8f8fd8' },
-      about: 'Speed is rarely a single number. It is a hundred small decisions — where the queue is, who owns the handoff, what gets measured. These are notes from eleven years of watching systems get faster and slower.',
-      buy: { label: 'Buy the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
-      authorBio: 'Idris Kwan is an operations researcher who has spent his career inside ports, hospitals and parcel networks.',
+      kind: 'book', slug: 'groove', title: 'groove', author: 'Ari Nakamura',
+      theme: { bg: '#141310', fg: '#EDE3CB', cover: '#EDE3CB' },
+      cover: { rule: 'groove', ink: '#1A1917', paper: '#EDE3CB', accent: '#FF5A2B', motif: '#8C8577' },
+      facts: [['Format', 'Hardcover + 30 audio examples'], ['Chapters', '9'], ['Published', '2026']],
+      about: 'Groove is not what you play, it is when you play it. This book is about the small, deliberate lateness at the heart of every good rhythm — the push, the pull, the pocket — and about what happens to a performance when the grid stops leaving room for a human.',
+      buy: { label: 'Get the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Listen', href: '#' }] },
+      authorBio: 'Ari Nakamura plays drums and writes about time.',
       praise: [
-        { body: 'Treats latency as a human problem, which it is.', name: 'Ruth Okafor', role: 'Systems engineer' }
+        { body: 'Reads like a hi-hat: precise, and impossible to sit still through.', name: 'J. Deslauriers', role: 'Bassist' },
+        { body: 'The clearest explanation of pocket I have read, and it is not even about music.', name: 'R. Lindqvist', role: 'Editor' }
       ]
     },
     {
-      kind: 'book', slug: 'keeping-the-lights-on', title: 'Keeping the Lights On', author: 'Nadia Oyelaran',
-      theme: { bg: '#6E665B', fg: '#DFC78E', cover: '#6E665B' },
-      cover: { rule: 'topo', ink: '#4a4437', paper: '#ded2b6', accent: '#c9a765', motif: '#8e8467' },
-      about: 'Eleven people, one substation, and a winter that would not end. A first-hand account of the grid as a human institution rather than a diagram.',
-      buy: { label: 'Buy the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
-      authorBio: 'Nadia Oyelaran is a former transmission engineer turned reporter.',
+      kind: 'book', slug: 'growth', title: 'Growth', author: 'Elena Duarte',
+      theme: { bg: '#F1EDE0', fg: '#21503A', cover: '#2C6B45' },
+      cover: { rule: 'growth', ink: '#2C6B45', paper: '#F1EDE0', accent: '#C79A2E', motif: '#9DB39F' },
+      facts: [['Format', 'Hardcover'], ['Cases', '9'], ['Published', '2026']],
+      about: 'Growth is not a curve you ride; it is a set of constraints you remove, in the right order. Nine cases — a bakery, a bus route, a national grid — and the two or three decisions in each that actually compounded.',
+      buy: { label: 'Get the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
+      authorBio: 'Elena Duarte studies small firms and teaches operations in Lisbon.',
       praise: [
-        { body: 'The best book on infrastructure written this decade.', name: 'Peter Lund', role: 'Grid operator' }
+        { body: 'Every founder I know needs this book and most of them will resist it.', name: 'P. Arnold', role: 'Operator' }
       ]
     },
     {
-      kind: 'book', slug: 'ninety-percent-of-everything', title: 'Ninety Percent of Everything', author: 'Tomás Ferreira',
-      theme: { bg: '#0d121f', fg: '#D0D1D4', cover: '#0d121f' },
-      cover: { rule: 'contour', ink: '#0d121f', paper: '#c9cbce', accent: '#e6e7ea', motif: '#3e4a63' },
-      about: 'Shipping moves the modern world on a schedule nobody outside the industry can see. A tour of ports, flags of convenience, and the economics of an industry that runs on thin margins and thick paperwork.',
-      buy: { label: 'Buy the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
-      authorBio: 'Tomás Ferreira spent nine years as a ship agent before writing this book.',
+      kind: 'book', slug: 'geek', title: 'Geek', author: 'Sam Whitaker',
+      theme: { bg: '#0A1220', fg: '#48D6E8', cover: '#0C1220' },
+      cover: { rule: 'circuit', ink: '#22406B', paper: '#0C1220', accent: '#48D6E8', motif: '#8A94A6' },
+      facts: [['Format', 'Hardcover'], ['Interviews', '27'], ['Published', '2026']],
+      about: 'Every system that survives has someone behind it who reads the datasheet, labels the cable, and knows why the clock drifts. A field guide to the obsessions that quietly become infrastructure.',
+      buy: { label: 'Get the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
+      authorBio: 'Sam Whitaker has kept a lab notebook since he was eleven.',
       praise: [
-        { body: 'Reads like a thriller and cites like a paper.', name: 'Aiko Tanaka', role: 'Logistics editor' }
+        { body: 'Finally a book that treats the person on the ladder as the protagonist.', name: 'D. Achterberg', role: 'Network engineer' }
       ]
     },
     {
-      kind: 'book', slug: 'slow-company', title: 'Slow Company', author: 'June Park',
-      theme: { bg: '#E2E2E2', fg: '#504F4F', cover: '#6D2B3F' },
-      cover: { rule: 'stripes', ink: '#6d2b3f', paper: '#efe9e6', accent: '#c76b7f', motif: '#e2c3c8' },
-      about: 'What happens when a company decides not to grow? Fifty interviews with owners who chose a ceiling on purpose — and what that choice cost them.',
-      buy: { label: 'Buy the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
-      authorBio: 'June Park writes about small business and writes a newsletter read by 40,000 owners.',
+      kind: 'book', slug: 'game', title: 'Game', author: 'Yuki Tanaka',
+      theme: { bg: '#15161B', fg: '#F0E14A', cover: '#15171C' },
+      cover: { rule: 'pixel', ink: '#232732', paper: '#15171C', accent: '#F0E14A', motif: '#5E6472' },
+      facts: [['Format', 'Hardcover'], ['Games studied', '18'], ['Published', '2026']],
+      about: 'Play is the cheapest simulator we have. What games — boards, fields, screens — actually teach about rules, feedback, and the strange pleasure of a fair loss.',
+      buy: { label: 'Get the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
+      authorBio: 'Yuki Tanaka designs games and studies how people learn rules.',
       praise: [
-        { body: 'The most useful business book I have read in years.', name: 'Devon Marsh', role: 'Founder, Hallam Tools' }
+        { body: 'Turns a lifetime of playing into a theory of practice.', name: 'M. Ferreira', role: 'Game designer' }
       ]
     },
     {

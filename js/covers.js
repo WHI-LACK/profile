@@ -416,6 +416,172 @@ window.PRESS = window.PRESS || {};
       ctx.strokeStyle = rgba(c.paper, 0.75); ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(w * 0.5, cy - r * 0.62, r, 0, Math.PI * 2); ctx.stroke();
       ctx.beginPath(); ctx.arc(w * 0.5, cy + r * 0.62, r, 0, Math.PI * 2); ctx.stroke();
+    },
+
+    /* ------------------------------------------------------------------ */
+    /* Five rules for a music / technology shelf. Flat shapes only: no      */
+    /* spheres, no photographs, no icons — the same discipline as the rest. */
+    /* ------------------------------------------------------------------ */
+
+    /* global: a graticule globe with flat landmasses and a terminator arc */
+    globe: function (ctx, w, h, c, rand) {
+      ctx.fillStyle = c.paper; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = rgba(c.ink, 0.5); ctx.lineWidth = 1;
+      for (var gx = w * 0.07; gx < w; gx += w * 0.072) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+      }
+      var cx = w * 0.5, cy = h * 0.42, r = w * 0.4;
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+      ctx.fillStyle = rgba(c.ink, 0.32); ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+      ctx.strokeStyle = rgba(c.paper, 0.5); ctx.lineWidth = 1.1;
+      for (var m = -3; m <= 3; m++) {
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, Math.abs(Math.cos(m * Math.PI / 7)) * r, r, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      for (var pp = -3; pp <= 3; pp++) {
+        var py = cy + (pp / 3.6) * r;
+        var prx = Math.sqrt(Math.max(0, 1 - Math.pow((py - cy) / r, 2))) * r;
+        ctx.beginPath(); ctx.ellipse(cx, py, prx, prx * 0.17, 0, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.fillStyle = c.accent;
+      [[-0.46, -0.34, 0.34, 0.5], [0.12, -0.5, 0.36, 0.3], [0.06, 0.12, 0.44, 0.42], [-0.54, 0.34, 0.24, 0.28]]
+        .forEach(function (b) {
+          var bx = cx + b[0] * r, by = cy + b[1] * r;
+          ctx.beginPath();
+          for (var i = 0; i <= 14; i++) {
+            var a = (i / 14) * Math.PI * 2;
+            var wob = 0.76 + 0.24 * Math.sin(a * 3 + b[0] * 9) + 0.12 * Math.sin(a * 5 + b[1] * 7);
+            var px = bx + Math.cos(a) * b[2] * r * 0.5 * wob;
+            var py2 = by + Math.sin(a) * b[3] * r * 0.5 * wob;
+            if (i === 0) ctx.moveTo(px, py2); else ctx.lineTo(px, py2);
+          }
+          ctx.closePath(); ctx.fill();
+        });
+      ctx.restore();
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.lineWidth = 1.4; ctx.strokeStyle = rgba(c.motif, 0.9); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, r * 1.07, -0.62, 0.92);
+      ctx.lineWidth = 3; ctx.strokeStyle = c.accent; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx + r * 0.62, cy - r * 0.42, 4, 0, Math.PI * 2);
+      ctx.fillStyle = c.accent; ctx.fill();
+    },
+
+    /* groove: a five-line staff against a click grid. Hits that land off the
+       beat take the accent — the machine is the grid, the offsets are the feel. */
+    groove: function (ctx, w, h, c, rand) {
+      ctx.fillStyle = c.paper; ctx.fillRect(0, 0, w, h);
+      var pad = w * 0.09, unit = (w - pad * 2) / 16;
+      ctx.strokeStyle = rgba(c.ink, 0.15); ctx.lineWidth = 1;
+      for (var b = 0; b <= 16; b++) {
+        ctx.beginPath(); ctx.moveTo(pad + b * unit, h * 0.13); ctx.lineTo(pad + b * unit, h * 0.87); ctx.stroke();
+      }
+      var top = h * 0.3, gap = (h * 0.7 - top) / 4;
+      ctx.strokeStyle = rgba(c.ink, 0.85); ctx.lineWidth = 1.6;
+      for (var i = 0; i < 5; i++) {
+        ctx.beginPath(); ctx.moveTo(pad, top + i * gap); ctx.lineTo(w - pad, top + i * gap); ctx.stroke();
+      }
+      var hits = [0, 0.66, 1.5, 2.33, 3, 4.5, 5.25, 6.5, 7.33, 8, 9.5, 10.33, 11.5, 12.66, 13.5, 15];
+      hits.forEach(function (beat, k) {
+        var off = Math.abs(beat - Math.round(beat)) > 0.05;
+        var x = pad + beat * unit;
+        var cy = h * 0.5 - Math.sin(k * 1.05) * gap * 1.25;
+        var bw = Math.max(3, unit * 0.24);
+        ctx.fillStyle = off ? c.accent : rgba(c.ink, 0.92);
+        ctx.fillRect(x - bw / 2, cy - gap * 2.6, bw, gap * 5.2);
+        if (k % 4 === 0) {
+          ctx.beginPath(); ctx.arc(x, cy - gap * 3.4, 2.6, 0, Math.PI * 2);
+          ctx.fillStyle = c.accent; ctx.fill();
+        }
+      });
+    },
+
+    /* growth: stems whose heights follow a curve, with the curve drawn over */
+    growth: function (ctx, w, h, c, rand) {
+      ctx.fillStyle = c.paper; ctx.fillRect(0, 0, w, h);
+      var pad = w * 0.09, n = 22, unit = (w - pad * 2) / n, base = h * 0.84;
+      var tops = [];
+      for (var i = 0; i < n; i++) {
+        var t = i / (n - 1);
+        var hgt = h * 0.58 * Math.pow(t, 1.75) + h * 0.03;
+        hgt *= 0.93 + rand() * 0.14;
+        var x = pad + i * unit + unit * 0.5;
+        ctx.fillStyle = rgba(c.ink, i % 4 === 0 ? 0.95 : 0.7);
+        ctx.fillRect(x - unit * 0.19, base - hgt, unit * 0.38, hgt);
+        tops.push([x, base - hgt]);
+      }
+      ctx.strokeStyle = c.accent; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      tops.forEach(function (p, i) { if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]); });
+      ctx.stroke();
+      ctx.strokeStyle = rgba(c.ink, 0.8); ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(pad, base); ctx.lineTo(w - pad, base); ctx.stroke();
+      ctx.fillStyle = rgba(c.motif, 0.9);
+      for (var s = 0; s < 6; s++) {
+        ctx.beginPath();
+        ctx.arc(pad + rand() * (w - pad * 2), base + h * 0.05, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    },
+
+    /* circuit: a board grid with routed traces that end in pads */
+    circuit: function (ctx, w, h, c, rand) {
+      ctx.fillStyle = c.paper; ctx.fillRect(0, 0, w, h);
+      var step = w / 18;
+      ctx.strokeStyle = rgba(c.ink, 0.85); ctx.lineWidth = 1;
+      for (var x = 0; x <= w + 1; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (var y = 0; y <= h + 1; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      var row = function (v) { return (Math.floor(v / step) + 0.5) * step; };
+      for (var k = 0; k < 14; k++) {
+        var y0 = row(rand() * h), y1 = row(rand() * h);
+        var x1 = w - (1 + Math.floor(rand() * 4)) * step;
+        var dir = y1 > y0 ? 1 : -1;
+        var hot = k % 4 === 0;
+        var colour = hot ? c.accent : rgba(c.motif, 0.9);
+        ctx.strokeStyle = colour; ctx.lineWidth = hot ? 2.4 : 1.4;
+        ctx.beginPath();
+        ctx.moveTo(-step * 0.5, y0);
+        ctx.lineTo(x1 - step * 1.6, y0);
+        ctx.lineTo(x1 - step * 0.6, y0 + dir * step);
+        ctx.lineTo(x1, y0 + dir * step * 1.5);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+        ctx.beginPath(); ctx.arc(x1, y1, hot ? 5.5 : 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = colour; ctx.fill();
+      }
+      ctx.fillStyle = rgba(c.accent, 0.18);
+      ctx.fillRect(0, h * 0.6, w, step * 0.9);
+      for (var p = 0; p < 12; p++) {
+        ctx.fillStyle = rgba(c.ink, 0.95);
+        ctx.fillRect(Math.floor(rand() * 17) * step, Math.floor(rand() * 23) * step, step * 0.9, step * 0.9);
+      }
+    },
+
+    /* pixel: a falling-blocks well — one piece in play, two placed, one cleared */
+    pixel: function (ctx, w, h, c, rand) {
+      ctx.fillStyle = c.paper; ctx.fillRect(0, 0, w, h);
+      var cols = 14, cell = w / cols;
+      ctx.strokeStyle = rgba(c.ink, 0.7); ctx.lineWidth = 1;
+      for (var x = 0; x <= w + 1; x += cell) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (var y = 0; y <= h + 1; y += cell) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      var block = function (col, row, cells, colour) {
+        ctx.fillStyle = colour;
+        cells.forEach(function (q) {
+          ctx.fillRect((col + q[0]) * cell + 1.5, (row + q[1]) * cell + 1.5, cell - 3, cell - 3);
+        });
+      };
+      block(3, 4, [[1, 0], [2, 0], [0, 1], [1, 1]], c.accent);
+      block(8, 7, [[0, 0], [1, 0], [2, 0], [1, 1]], c.accent);
+      block(4, 11, [[0, 0], [0, 1], [0, 2], [1, 2]], rgba(c.motif, 0.85));
+      ctx.strokeStyle = c.accent; ctx.lineWidth = 2;
+      [[10, 2], [11, 2], [12, 2], [10, 3]].forEach(function (q) {
+        ctx.strokeRect(q[0] * cell + 1.5, q[1] * cell + 1.5, cell - 3, cell - 3);
+      });
+      ctx.fillStyle = rgba(c.motif, 0.32);
+      for (var f = 0; f < cols; f++) {
+        if (rand() > 0.55) ctx.fillRect(f * cell + cell * 0.28, 13 * cell + cell * 0.28, cell * 0.44, cell * 0.44);
+      }
     }
   };
 
@@ -454,7 +620,7 @@ window.PRESS = window.PRESS || {};
   var BAND_W = 1024, BAND_H = 154;
 
   /* Which rules paint on an ink base? Their bands need a heavier paper wash. */
-  var DARK_RULES = /halftone|contour|stripes|circles|blueprint|ripple|arcs|waveform|starfield|venn/;
+  var DARK_RULES = /halftone|contour|stripes|circles|blueprint|ripple|arcs|waveform|starfield|venn|globe|circuit|pixel/;
 
   /* the generative rule on its own — no mark, no type — so the band can wrap the
      artwork without printing the cover's title twice */
