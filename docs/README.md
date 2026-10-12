@@ -2,6 +2,8 @@
 
 - **`screenshot-catalogue.png`**：目录页。5 块书板（程序化封面 + 印刷书脊带），左侧刻度尺，
   右下角可关闭的通知卡。
+- **`screenshot-live-site.png`**：部署到 GitHub Pages 之后、直接访问
+  https://whi-lack.github.io/profile/ 截的图（2026-10-12），用来确认线上跑的是同一套代码。
 - **`screenshot-book-open.png`**：打开一本书之后。整页两种颜色被换成这本书自己的一对
   （这里是 `#C1B676` / `#18185E`），书本立起来并可拖拽旋转，返回箭头、标题、作者、购买按钮、
   作者书牌依次排开。
