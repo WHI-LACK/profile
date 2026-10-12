@@ -65,6 +65,9 @@ window.PRESS = window.PRESS || {};
       kind: 'book', slug: 'the-long-middle', title: 'The Long Middle', author: 'Mara Ellison',
       theme: { bg: '#292432', fg: '#DBC895', cover: '#292432' },
       cover: { rule: 'marble', ink: '#10262c', paper: '#e9dfc6', accent: '#e2803f', motif: '#7fc9bd' },
+      /* Optional: any [label, value] pairs you want printed on the A4 sheet.
+         Delete the line and the block simply disappears. */
+      facts: [['Format', 'Hardcover, 152 × 229 mm'], ['Pages', '268'], ['First published', 'March 2026']],
       about: 'Every durable thing — a bridge, a standards body, a language — spends most of its life in the middle: past the founding story, well before the ending. This book is about that long, unglamorous centre.',
       buy: { label: 'Buy the book', links: [{ label: 'Publisher', href: '#' }, { label: 'Sample', href: '#' }] },
       authorBio: 'Mara Ellison writes about institutions and the people who keep them standing. She lives in Utrecht.',
@@ -200,6 +203,7 @@ window.PRESS = window.PRESS || {};
     kind: 'film', slug: 'the-quiet-fleet', title: 'The Quiet Fleet', rowLabel: 'A film about the ships nobody watches',
     theme: { bg: '#222222', fg: '#ffd943', cover: '#111111' },
     cover: { rule: 'starfield', ink: '#111111', paper: '#ffd943', accent: '#ffffff', motif: '#3b4353' },
+    facts: [['Runtime', '94 minutes'], ['Director', 'Sofia Marchetti'], ['Format', 'DCP · 1.85:1 · 5.1']],
     synopsis: 'Four months aboard a maintenance vessel in the North Sea, and the crews who keep a hundred unremarkable machines running. Filmed over two winters with a crew of three.',
     credits: [
       ['Directed by', 'Sofia Marchetti'],
@@ -227,6 +231,7 @@ window.PRESS = window.PRESS || {};
     kind: 'podcast', slug: 'half-life', title: 'Half-Life', rowLabel: 'A Paper & Signal podcast about maintenance',
     theme: { bg: '#201819', fg: '#f3e6d2', cover: '#1d1a15' },
     cover: { rule: 'venn', ink: '#241c16', paper: '#f3e6d2', accent: '#d9503f', motif: '#8c8577' },
+    facts: [['Season', 'One, four episodes'], ['Recorded', '2025 – 2026'], ['Format', 'Stereo, 30 – 50 min']],
     subtitle: 'Conversations with the people who keep things running',
     about: 'Each episode is one object, one failure, and the person who stayed with it. Recorded in kitchens, workshops and one very cold substation.',
     seasons: [

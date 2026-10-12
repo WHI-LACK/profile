@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper &amp; Signal — A4 sheet template</title>
+<meta name="description" content="Printable one-sheet-per-title template in the Paper &amp; Signal style.">
+<link rel="stylesheet" href="css/tokens.css">
+<style>
+/* ============================================================================
+   A4 one-sheet template. Same two-colour system as the site: every sheet sets
+   --bg / --fg from the product, and everything on it — type, rules, the bar —
+   follows those two values. Print it with Ctrl/Cmd+P (A4, margins: none,
+   background graphics: on) or "Save as PDF".
+   ========================================================================== */
+
+@page { size: A4 portrait; margin: 0; }
+
+html, body { background: #ececeb; }
+body { padding: 0; }
+
+.Desk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  padding: 26px 16px 60px;
+  background: #ececeb;
+}
+
+/* screen-only toolbar ------------------------------------------------------ */
+.Chrome {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 210mm;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, .12);
+  border-radius: 4px;
+  color: #0a2540;
+  font-family: var(--font-headline);
+  font-size: 14px;
+}
+.Chrome label { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.Chrome select {
+  font: inherit;
+  padding: 6px 8px;
+  border: 1px solid rgba(10, 37, 64, .25);
+  border-radius: 3px;
+  background: #fff;
+  color: inherit;
+  max-width: 46vw;
+}
+.Chrome button {
+  padding: 7px 14px;
+  background: #0a2540;
+  color: #fff;
+  border-radius: 3px;
+  font: inherit;
+  cursor: pointer;
+}
+.Chrome__hint { margin-left: auto; opacity: .65; font-weight: 400; }
+.Chrome__pages { opacity: .8; }
+
+#sheets { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+/* On screen only, scale the sheet so a whole A4 page fits the window.
+   Printing is never scaled: @media print resets it to 100%. */
+@media screen {
+  #sheets { transform: scale(var(--fit, 1)); transform-origin: top center; }
+}
+@media print { #sheets { display: block; transform: none !important; } }
+
+/* the sheet ---------------------------------------------------------------- */
+.Sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 210mm;
+  height: 296mm;
+  padding: 16mm 18mm 12mm;
+  overflow: hidden;
+  background: var(--bg, #201819);
+  color: var(--fg, #fff);
+  border-radius: 1mm;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .22);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+@media print {
+  html, body { background: #fff; }
+  .Desk { display: block; padding: 0; gap: 0; background: #fff; }
+  .Chrome { display: none !important; }
+  .Sheet { margin: 0; border-radius: 0; box-shadow: none; break-inside: avoid; }
+  .Sheet + .Sheet { break-before: page; page-break-before: always; }
+}
+
+/* header ------------------------------------------------------------------- */
+.Head { display: flex; align-items: flex-start; justify-content: space-between; }
+.Head__brand { display: flex; align-items: center; gap: 12px; }
+.Mark { width: 13mm; height: 16mm; fill: none; stroke: currentColor; stroke-linecap: round; }
+.Mark__arc { stroke-width: 2.6; }
+.Mark__dot { fill: currentColor; stroke: none; }
+.Head__names { display: flex; flex-direction: column; gap: 2px; }
+.Head__name { font-family: var(--font-headline); font-weight: 600; font-size: 15px; letter-spacing: .32px; }
+.Head__tagline { font-family: var(--font-headline); font-style: italic; font-weight: 600; font-size: 15px; letter-spacing: .32px; }
+.Head__kicker {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .6;
+}
+
+/* the slab: cover artwork foreshortened, printed band under it -------------- */
+.Stage { display: flex; justify-content: center; align-items: flex-start; padding: 8mm 0 6mm; }
+/* width as a share of the sheet so the page can never overflow */
+.Slab { width: 54%; }
+.Slab canvas { display: block; width: 100%; height: auto; }
+
+/* copy --------------------------------------------------------------------- */
+.Copy { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.Copy__title { font-family: var(--font-display); font-weight: 700; font-size: 24pt; line-height: 1.16; letter-spacing: -.01em; }
+.Copy__author { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 14pt; margin-top: 4pt; }
+.Copy__rule { display: block; width: 60px; height: 1px; margin: 5mm 0 4mm; background: currentColor; }
+.Copy__blurb { font-size: 11.5pt; line-height: 1.62; max-width: 74ch; }
+.Copy__meta { display: flex; gap: 10mm; margin-top: 4mm; font-size: 9.5pt; opacity: .72; }
+.Copy__meta dt { font-family: var(--font-headline); font-weight: 600; }
+
+/* buy row, same border language as the site -------------------------------- */
+.Buy { display: inline-flex; margin-top: 5mm; border: 1px solid currentColor; font-size: 11pt; }
+.Buy__cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3.2mm 6mm;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: .32px;
+}
+.Buy__cell + .Buy__cell { border-left: 1px solid currentColor; }
+.Buy__arrow { width: 3mm; height: 3mm; fill: currentColor; }
+
+/* footer: QR + address ----------------------------------------------------- */
+.Foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10mm;
+  margin-top: auto;
+  padding-top: 4mm;
+  border-top: 1px solid currentColor;
+}
+.Foot__address { font-family: var(--font-headline); font-weight: 600; font-size: 10pt; letter-spacing: .32px; }
+.Foot__note { font-size: 8.5pt; opacity: .68; margin-top: 2mm; max-width: 62ch; }
+.Qr { display: flex; align-items: center; gap: 4mm; }
+.Qr__box { width: 24mm; height: 24mm; padding: 1.5mm; background: #fff; }
+.Qr__box img { width: 100%; height: 100%; display: block; }
+.Qr__label { font-family: var(--font-headline); font-weight: 600; font-size: 9pt; line-height: 1.35; max-width: 30mm; }
+.Qr__label small { display: block; font-weight: 400; opacity: .7; font-size: 8pt; margin-top: 1mm; }
+
+/* screen-only page number -------------------------------------------------- */
+.Sheet__pages { position: absolute; top: 8mm; right: 8mm; font-size: 8.5pt; opacity: .5; font-family: var(--font-headline); }
+@media print { .Sheet__pages { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="Desk">
+  <div class="Chrome">
+    <label>标题
+      <select id="picker"></select>
+    </label>
+    <button id="to-all" type="button">全部页</button>
+    <button id="print" type="button">打印 / 存为 PDF</button>
+    <span class="Chrome__pages" id="count"></span>
+    <span class="Chrome__hint">A4 纵向 · 边距选“无” · 勾选“背景图形”</span>
+  </div>
+
+  <div id="sheets"></div>
+</div>
+
+<script src="js/content.js"></script>
+<script src="js/covers.js"></script>
+<script src="js/sheet.js"></script>
+</body>
+</html>
