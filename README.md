@@ -131,6 +131,10 @@ facts: [['Format', 'Hardcover, 152 × 229 mm'], ['Pages', '268'], ['First publis
 **字体**：站点按 `Ivar Display / Headline / Text` 排版，没装就回退 Georgia 与宋体。
 想完全还原，把 woff2 放进 `assets/fonts/`，在 `css/tokens.css` 顶部取消 `@font-face` 注释。
 
+**改动没生效？** GitHub Pages 给静态文件带 `max-age`，浏览器会留旧副本。`index.html`
+里每个 CSS/JS 都带 `?v=7` 这样的版本号——**改完文件把它 +1**（顺手 Ctrl+Shift+R 一次），
+浏览者就一定会拿到新版本。`build.js` 会自动忽略这个版本号。
+
 **订阅表单**：在 `SITE.signupEndpoint` 填一个接口地址（Formspree、Buttondown、自己的函数），
 否则表单只在前端提示"演示模式，没有发送"。
 

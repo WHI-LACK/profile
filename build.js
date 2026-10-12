@@ -15,14 +15,14 @@ var html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 var inlined = 0;
 
 html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, function (whole, href) {
-  var file = path.join(root, href);
+  var file = path.join(root, href.split('?')[0]);       // ignore ?v= cache busting
   if (!fs.existsSync(file)) return whole;
   inlined++;
   return '<style>\n/* ' + href + ' */\n' + fs.readFileSync(file, 'utf8').trim() + '\n</style>';
 });
 
 html = html.replace(/<script src="([^"]+)"><\/script>/g, function (whole, src) {
-  var file = path.join(root, src);
+  var file = path.join(root, src.split('?')[0]);
   if (!fs.existsSync(file)) return whole;
   inlined++;
   return '<script>\n/* ' + src + ' */\n' + fs.readFileSync(file, 'utf8').trim() + '\n</script>';
