@@ -48,8 +48,9 @@ docs/                 真实截图与开发期留档（见 docs/README.md）
 **② 只有两种颜色。** `--background` 与 `--color` 控制舞台、正文、1px 细线、SVG 描边和 3D 雾色。
 打开一本书就是换这两个值，整页一次性换肤，`::selection` 也跟着反色。
 
-**③ 点击不是跳转。** 打开产品时目录隐藏、详情淡入，URL 用 `history.replaceState` 记成 `/<slug>`，
-`popstate` 能退回目录。每个产品都有独立 URL，刷新和分享都成立。
+**③ 点击不是跳转。** 打开产品时目录隐藏、详情淡入，URL 用 `history.replaceState` 记成 `#/<slug>`
+（例如 `…/profile/#/field-notes-on-speed`）。放在**任何**静态托管的**任何子目录**下都能用，
+不需要服务器重写规则，刷新也不会 404。
 
 ---
 
@@ -108,19 +109,34 @@ docs/                 真实截图与开发期留档（见 docs/README.md）
 
 ---
 
-## 6. 部署
+## 6. 部署（GitHub Pages 等静态托管）
 
-传到任何静态托管即可（GitHub Pages / Netlify / Vercel / 对象存储）。
+传上去就行，不需要服务器、不需要重写规则、不需要构建。有两种传法：
 
-需要注意一点：产品页用 `history.replaceState` 生成 `/<slug>` 地址，如果用户直接刷新
-`/the-long-middle`，需要托管方把所有路径重写到 `index.html`，否则会 404。
-Netlify 放一个 `_redirects` 文件：
+**A. 传整个项目（推荐用于长期维护）**
 
-```
-/*  /index.html  200
+```bash
+git add -A && git commit -m "site" && git push
 ```
 
-在 `file://` 或不支持改 URL 的环境里，代码会自动跳过写 URL，其余功能照常。
+GitHub 仓库 → Settings → Pages → Source 选 `main` / `root` 即可。仓库名如果是 `profile`，
+地址就是 `https://<用户名>.github.io/profile/`。
+
+⚠️ 用网页版 "Upload files" 时**一定要把 `css/`、`js/` 两个文件夹一起拖进去**。
+只传 `index.html` 的话，页面会变成"裸 HTML"（没有样式、没有目录、没有 3D）——因为
+`/profile/css/tokens.css` 会是 404。
+
+**B. 只传一个文件（最省事，不怕漏文件夹）**
+
+```bash
+node build.js        # 生成 dist/index.html：CSS 与 JS 全部内联，158 KB 单文件
+```
+
+把 `dist/index.html` 作为仓库根目录的 `index.html` 上传（覆盖原来那个）即可：
+零外部请求，`file://` 双击能开，GitHub Pages 子目录也能开。
+以后改了 `js/content.js` 等内容，重新跑一次 `node build.js` 再上传就行。
+
+项目里已经放了 `.nojekyll`（阻止 GitHub Pages 用 Jekyll 处理文件）。
 
 ---
 

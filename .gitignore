@@ -1,0 +1,8 @@
+# build output (rebuild with: node build.js)
+dist/
+
+# local / OS noise
+Thumbs.db
+Desktop.ini
+.DS_Store
+node_modules/

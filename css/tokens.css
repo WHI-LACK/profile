@@ -1,0 +1,169 @@
+/* ============================================================================
+   tokens.css — reset, design tokens, type scale.
+
+   Two colours are visible at any time: --background and --color. Everything
+   else (rules, type, SVG) inherits from --color, so switching a product only
+   changes two custom properties. js/main.js writes them onto <html>.
+   ========================================================================== */
+
+:root {
+  /* layout ---------------------------------------------------------------- */
+  --bodyMargin: calc(10px + 1vw);
+  --windowWidth: 100vw;            /* main.js subtracts the scrollbar width */
+  --vh: 1vh;                       /* main.js writes a px value for 1% of the viewport */
+  --screenHeight: 100%;
+  /* must equal the 3D pitch: js/gl.js -> params.gap (0.324 world units) */
+  --rowHeight: calc(var(--vh) * 24.5);
+  --stageTop: 12vh;
+
+  /* colour ---------------------------------------------------------------- */
+  --background: #201819;
+  --color: #ffffff;
+  --cover: #292432;
+  --gradient: none;
+  --linkColor: var(--color);
+  --focusBoxShadow: 0 0 0 2px var(--background), 0 0 0 3px var(--color);
+
+  /* type ------------------------------------------------------------------ */
+  /* Drop a webfont into assets/fonts and uncomment:
+     @font-face { font-family: "Ivar Text"; font-weight: 400 600;
+                  src: url("../assets/fonts/ivar-text.woff2") format("woff2-variations");
+                  font-display: swap; }                                     */
+  --font-display: "Ivar Display", "Playfair Display", "Songti SC", "Noto Serif SC",
+                  "Source Han Serif SC", Georgia, "Times New Roman", serif;
+  --font-headline: "Ivar Headline", "Playfair Display", "Songti SC", "Noto Serif SC",
+                   "Source Han Serif SC", Georgia, "Times New Roman", serif;
+  --font-text: "Ivar Text", "Songti SC", "Noto Serif SC", "Source Han Serif SC",
+               Georgia, "Times New Roman", serif;
+
+  --tracking: .32px;
+  --rule: 1px solid var(--color);
+
+  /* motion ---------------------------------------------------------------- */
+  --ease-out: cubic-bezier(.25, 1, .5, 1);
+  --fade-fast: .2s;
+  --fade: .3s;
+  --fade-slow: .5s;
+}
+
+/* reset ------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* elements that start hidden stay hidden even when a class sets display */
+[hidden] { display: none !important; }
+
+html, body { margin: 0; padding: 0; }
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: none;
+  background: var(--background);
+}
+
+body {
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color);
+  background: var(--background);
+  transition: background-color var(--fade) linear, color var(--fade) linear;
+}
+
+blockquote, figure, h1, h2, h3, h4, h5, h6, p, pre, dl, dd, ol, ul { margin: 0; }
+h1, h2, h3, h4, h5, h6 { font-size: 16px; font-weight: 400; line-height: 1; }
+ol, ul { padding: 0; list-style: none; }
+img, canvas, svg { display: block; max-width: 100%; }
+dl, dd { padding: 0; }
+
+a { color: var(--color); text-decoration: none; }
+a, button { letter-spacing: var(--tracking); }
+
+button {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  font: inherit;
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 17px;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+}
+
+/* inverted selection, per state -------------------------------------------- */
+::selection { background: var(--color); color: var(--background); }
+::-moz-selection { background: var(--color); color: var(--background); }
+
+.Info ::selection { background: #000; color: #fff; }
+
+/* focus ring only for keyboard users -------------------------------------- */
+.KeyboardNav :focus-visible {
+  outline: none;
+  box-shadow: var(--focusBoxShadow);
+  border-radius: 2px;
+}
+
+/* the 3D stage uses the pointer; never select text mid-drag */
+html.is-dragging, html.is-dragging * { user-select: none; }
+
+/* shared bits ------------------------------------------------------------- */
+.Rule {
+  display: block;
+  width: 60px;
+  height: 1px;
+  background: var(--color);
+}
+
+/* A small label with a leading 60px rule, as used across the detail panels */
+.Label {
+  display: flex;
+  align-items: center;
+  margin: 80px 0 20px;
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-style: italic;
+  font-size: 1.2em;
+}
+.Label::before {
+  content: "";
+  width: 60px;
+  height: 1px;
+  margin-right: 16px;
+  border-bottom: 1px solid var(--color);
+}
+
+.SkipLink {
+  position: fixed;
+  top: -100px;
+  left: var(--bodyMargin);
+  z-index: 10000;
+  padding: 10px 16px;
+  background: var(--color);
+  color: var(--background);
+  font-size: 15px;
+  transition: top var(--fade-fast) ease-out;
+}
+.SkipLink:focus { top: var(--bodyMargin); }
+
+.VisuallyHidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* reduced motion ---------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+  body { transition: none; }
+  .Stage__fill, .Stage__backdrop, .Stage__canvas { transition: none; }
+}

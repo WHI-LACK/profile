@@ -1,0 +1,373 @@
+/* ============================================================================
+   catalog.css — the catalogue rows (the invisible hit areas that drive the 3D
+   stack), the detail panels, and the small editorial components inside them.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- intro --- */
+.Intro {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+  padding: 0 calc(42.5px + 1.75vw);
+  margin-top: calc(9px + 1vw);
+  margin-bottom: calc(20 * var(--vh));
+  letter-spacing: var(--tracking);
+  line-height: 1.4;
+  transition: opacity var(--fade-slow) linear;
+}
+.Intro__brand {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.Intro__tagline {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.3;
+}
+.is-product .Intro,
+.is-dragging .Intro { opacity: 0; pointer-events: none; }
+
+/* ------------------------------------------------------------- catalogue --- */
+.Shell { position: relative; }
+/* The stack starts below the page header. js/main.js writes the same offset into
+   the 3D stage, so the row grid and the slabs stay locked together. */
+.Catalogue { position: relative; z-index: 2; width: var(--windowWidth); padding-top: var(--stageTop, 12vh); }
+
+.Catalogue__row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--rowHeight);
+  padding: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color);
+  background: var(--rowBackground, transparent);
+  cursor: pointer;
+  opacity: 0;                       /* the 3D stack is the visible thing */
+  pointer-events: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--fade-fast) linear;
+}
+.is-ready .Catalogue__row { pointer-events: auto; }
+.is-scrolling .Catalogue__row,
+.is-product .Catalogue__row { pointer-events: none; }
+
+.Catalogue__text { display: flex; align-items: baseline; gap: 50px; text-align: left; }
+.Catalogue__title { font-family: var(--font-headline); font-weight: 600; }
+.Catalogue__author { font-family: var(--font-text); font-style: italic; opacity: .85; }
+.Catalogue__row--film .Catalogue__text,
+.Catalogue__row--podcast .Catalogue__text { flex-direction: column; gap: 6px; align-items: flex-start; }
+.Catalogue__row--film .Catalogue__title,
+.Catalogue__row--podcast .Catalogue__title { font-family: var(--font-display); font-style: italic; font-size: 21px; }
+
+/* No WebGL: the catalogue becomes printed bands, exactly like the fallback */
+.is-nogl .Catalogue__row { opacity: 1; color: var(--rowColor, var(--color)); }
+.is-nogl .Catalogue__row + .Catalogue__row { border-top: 1px solid var(--rowColor, var(--color)); }
+.is-nogl .Catalogue__row--film,
+.is-nogl .Catalogue__row--podcast { height: 100vh; align-items: flex-start; padding-top: 30px; }
+
+/* ------------------------------------------------------------- details ---- */
+.Details { position: relative; z-index: 3; display: none; }
+.is-product .Catalogue { display: none; }
+.is-product .Details { display: block; }
+.is-product .Intro { display: none; }
+
+.Detail { display: none; }
+.Detail.is-active {
+  display: block;
+  animation: DetailIn var(--fade-slow) linear var(--fade) forwards;
+  opacity: 0;
+}
+@keyframes DetailIn { from { opacity: 0; } to { opacity: 1; } }
+.is-nogl .Detail.is-active { opacity: 1; animation: none; }
+
+.Detail__panel { padding: 0 6vw calc(10 * var(--vh)) 14vw; font-size: 17px; line-height: 1.5; color: var(--color); }
+@media (min-width: 900px) { .Detail__panel { padding: 0 8vw calc(25 * var(--vh)); } }
+.Detail__panel a { text-decoration: underline; }
+
+.Detail__info {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+  margin: auto;
+  padding: 0;
+  transform: translateY(20px);
+}
+@media (min-width: 900px) { .Detail__info { flex-direction: row; } }
+.is-product .Detail.is-active .Detail__info { transition: transform 1s ease .5s; transform: translateY(0); }
+.is-nogl .Detail.is-active .Detail__info { transform: none; transition: none; }
+
+/* the stage the book is drawn on — also the drag surface ------------------ */
+.Detail__left {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: calc(35 * var(--vh));
+  height: calc(65 * var(--vh));
+  cursor: grab;
+}
+.is-dragging .Detail__left { cursor: grabbing; }
+@media (min-width: 900px) {
+  /* tall enough to sit under the book the canvas draws, so the drag lands */
+  .Detail__left { flex-basis: 58%; height: auto; min-height: calc(62 * var(--vh)); padding-top: calc(20 * var(--vh)); }
+}
+.Detail__right { display: flex; flex-direction: column; align-items: flex-start; }
+@media (min-width: 900px) { .Detail__right { flex-basis: 42%; padding-top: calc(20 * var(--vh)); } }
+
+.Detail__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(19px + .75vw);
+  line-height: 1.4;
+}
+@media (min-width: 1600px) { .Detail__title { font-size: 1.75em; line-height: 1.4em; letter-spacing: var(--tracking); } }
+.Detail__author {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 21px;
+  margin-top: 6px;
+}
+.Detail__hr { margin: 20px 0; }
+.Detail__lede { margin-top: 14px; margin-bottom: 20px; max-width: 46ch; }
+.Detail__body p + p { margin-top: 1.2em; }
+
+/* film / podcast panels put a poster in the left column instead of the 3D book */
+.Detail__panel--film .Detail__left,
+.Detail__panel--podcast .Detail__left { cursor: default; padding-top: calc(14 * var(--vh)); }
+.Detail__panel--film .Detail__right,
+.Detail__panel--podcast .Detail__right { padding-top: calc(14 * var(--vh)); }
+
+/* generic text link, matching the reference's .Link component */
+.Link { cursor: pointer; font-weight: 600; transition: opacity var(--fade-fast) linear; }
+.Link:hover { opacity: .7; }
+
+.Detail__bio { max-width: 62ch; margin-top: 4px; }
+
+/* buy links --------------------------------------------------------------- */
+.Detail__buyOptions { display: flex; flex-direction: column; width: 100%; margin-top: 24px; }
+.BuyGroup { display: flex; flex-direction: column; align-items: stretch; }
+.BuyGroup + .BuyGroup { margin-top: 36px; }
+.BuyGroup__label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 21px;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.Buy {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: -1px;
+  padding: 0 0 0 16px;
+  border: 1px solid var(--color);
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  z-index: 3;
+  pointer-events: auto;
+  transition: background .1s linear;
+}
+.Buy::before, .Buy::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color);
+  transition: transform var(--fade-fast) ease-out;
+}
+.Buy::before { top: -1px; }
+.Buy::after { bottom: -1px; }
+.Buy__bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--color);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--fade) ease-out;
+}
+.Buy__label { position: relative; top: 1px; transition: transform var(--fade) ease-out; }
+.Buy__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  padding: 18px 10px 16px 11px;
+  margin-left: 17px;
+  border-left: .5px solid var(--color);
+  background: var(--background);
+  overflow: hidden;
+  transition: transform .1s linear, background .1s linear;
+}
+.Buy__iconPair { position: relative; width: 9px; height: 9px; }
+.Buy__arrow, .Buy__arrowAlt { position: absolute; left: 0; top: 0; width: 9px; height: 9px; fill: var(--color); transition: transform .4s var(--ease-out); }
+.Buy__arrowAlt { transform: translate(-30px, 30px); }
+.Buy:hover .Buy__icon, .Buy:focus-visible .Buy__icon { background: var(--color); transform: translateX(1px); }
+.Buy:hover .Buy__arrow, .Buy:focus-visible .Buy__arrow { transform: translate(30px, -30px); }
+.Buy:hover .Buy__arrowAlt, .Buy:focus-visible .Buy__arrowAlt { transform: translate(0, 0); }
+.Buy:hover .Buy__label { transform: translateX(4px); }
+.Buy:hover::before { transform: translateY(1px); }
+.Buy:hover::after { transform: translateY(-1px); }
+.Buy:hover .Buy__bar { transform: scaleX(1); }
+
+/* inline link groups (like the reference's bordered pair) ------------------ */
+.LinkGroup { display: inline-flex; margin-top: 32px; margin-bottom: 22px; border: 1px solid; font-size: 17px; }
+.LinkGroup__cell { display: inline-block; transition: background var(--fade-fast) linear; }
+.LinkGroup__cell + .LinkGroup__cell { border-left: 1px solid; }
+.LinkGroup__cell:hover { background: var(--color); color: var(--background); }
+.LinkGroup__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: inherit;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* author ------------------------------------------------------------------ */
+.Bio { max-width: 62ch; }
+.Bio p + p { margin-top: 1em; }
+.Bio__portrait { width: 160px; height: auto; margin: 16px 0 4px; border: 1px solid var(--color); }
+
+/* praise ------------------------------------------------------------------ */
+.PraiseList { max-width: 1280px; margin: auto; }
+@media (min-width: 900px) { .PraiseList { padding: 40px 0; } }
+.PraiseList__grid { display: grid; grid-template-columns: 1fr; gap: 0 4vw; }
+@media (min-width: 900px) { .PraiseList__grid { grid-template-columns: repeat(3, 1fr); } }
+.Praise { break-inside: avoid; margin-bottom: 40px; padding-top: 40px; }
+.Praise__quote { margin-bottom: 24px; }
+.Praise__quote::before {
+  content: "“";
+  display: block;
+  font-family: var(--font-text);
+  font-size: 80px;
+  line-height: .22;
+}
+.Praise__quote::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  margin-top: 24px;
+  background: var(--color);
+  opacity: .4;
+}
+.Praise__name { font-family: var(--font-headline); font-weight: 600; }
+.Praise__role { opacity: .7; padding-right: 40px; }
+
+/* zine / video frames ----------------------------------------------------- */
+.Zine { position: relative; margin-top: 40px; max-width: 380px; }
+.Zine__link { position: relative; display: block; }
+.Zine__img { display: block; width: 100%; height: auto; margin-bottom: 8px; border: 1px solid var(--color); cursor: pointer; }
+.Zine__cta {
+  position: absolute;
+  top: 16px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  padding: 8px 15px 6px;
+  background: var(--background);
+  border: 1px solid var(--color);
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 14px;
+}
+.Zine__link:hover .Zine__cta { background: var(--color); color: var(--background); }
+.Zine__icon { width: 9px; height: 9px; margin-left: 10px; fill: currentColor; }
+.Zine__caption { font-size: 14px; opacity: .7; }
+
+/* podcast episodes -------------------------------------------------------- */
+.Season { position: relative; padding-left: 0; font-family: var(--font-headline); font-style: italic; font-weight: 600; font-size: 21px; margin: 34px 0; }
+.Season::before { content: ""; display: block; width: 60px; height: 1px; margin-bottom: 14px; background: var(--color); }
+.Episodes { border-top: 1px solid var(--color); }
+.Episode { border-bottom: 1px solid var(--color); opacity: .5; }
+.Episode--published { opacity: 1; }
+.Episode__eyebrow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  padding: 18px 40px 18px 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  cursor: pointer;
+}
+.Episode__plus { position: absolute; right: 0; top: 50%; width: 14px; height: 8px; margin-top: -4px; }
+.Episode__plus::before, .Episode__plus::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 14px;
+  height: 2px;
+  background: var(--color);
+  transition: transform var(--fade) ease-out;
+}
+.Episode__plus::after { transform: rotate(90deg); }
+.Episode.is-expanded .Episode__plus::before { transform: rotate(-135deg); }
+.Episode.is-expanded .Episode__plus::after { transform: rotate(-45deg); }
+.Episode__body { height: 0; overflow: hidden; }
+.Episode.is-expanded .Episode__body { height: auto; overflow: visible; padding-bottom: 28px; }
+.Episode__summary { margin: 1.4em 0; max-width: 62ch; }
+.Episode__notes { font-size: 15px; opacity: .75; font-style: italic; }
+.Episode__guests { margin: 1.4em 0 0; font-size: 15px; }
+.Episode__guestName { font-weight: 600; }
+.Episode__guestRole { opacity: .7; }
+.Episode__audio { margin-top: 1.6em; display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+.Episode__wave {
+  width: min(520px, 60vw);
+  height: 50px;
+  border: 1px solid var(--color);
+  padding: 4px 8px;
+}
+.Episode__play {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border: 1px solid var(--color);
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 15px;
+  transition: background var(--fade-fast) linear, color var(--fade-fast) linear;
+}
+.Episode__play:hover { background: var(--color); color: var(--background); }
+.Episode__time { font-size: 14px; opacity: .7; font-variant-numeric: tabular-nums; }
+.TranscriptLink {
+  display: inline-flex;
+  margin-top: 20px;
+  padding: 8px 16px;
+  border: 1px solid var(--color);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  transition: background var(--fade-fast) linear, color var(--fade-fast) linear;
+}
+.TranscriptLink:hover { background: var(--color); color: var(--background); }
+
+/* film panel inside the catalogue ---------------------------------------- */
+.Detail__filmPoster { width: 100%; border: 1px solid var(--color); }
